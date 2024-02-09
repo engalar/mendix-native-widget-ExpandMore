@@ -10,7 +10,7 @@
   },
   "license": "Apache-2.0",
   "config": {
-    "projectPath": "./tests/testProject"
+    "projectPath": "D:\\\\Users\\\\eg\\\\Mendix\\\\Hotel-main"
   },
   "packagePath": "mendix",
   "scripts": {
@@ -30,7 +30,7 @@
     "@mendix/pluggable-widgets-tools": "^10.5.0"
   },
   "dependencies": {
-
+    "react-native-animatable": "^1.4.0"
   },
   "resolutions": {
     "react": "18.2.0",
