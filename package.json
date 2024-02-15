@@ -30,6 +30,8 @@
     "@mendix/pluggable-widgets-tools": "^10.5.0"
   },
   "dependencies": {
+    "@expo/vector-icons": "^13.0.0",
+    "color": "^4.2.3",
     "react-native-animatable": "^1.4.0"
   },
   "resolutions": {
