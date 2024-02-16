@@ -1,5 +1,5 @@
 import { createElement } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableWithoutFeedback, View, useWindowDimensions } from "react-native";
 import Animated from "react-native-reanimated";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 });
 
 const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, isExpanded }) => {
+    const { width: windowWidth } = useWindowDimensions();
     const rStyle = {
         backgroundColor: Animated.interpolateColors(isExpanded, {
             inputRange: [0, 1],
@@ -68,43 +69,51 @@ const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, isExpand
 
     const isHeader = index === 0;
 
+    const toggleExpanded = () => {
+        if (isHeader) isExpanded.setValue(!isExpanded.value);
+    };
+
     return (
-        <Animated.View
-            onTouchEnd={() => {
-                if (isHeader) isExpanded.value = !isExpanded.value;
-            }}
-            style={[
-                styles.container,
-                {
-                    zIndex: dropdownItemsCount - index
-                },
-                rStyle
-            ]}
-        >
-            <View style={styles.innerContainer}>
-                <View style={styles.iconContainer}>
-                    <AntDesign name={iconName} size={25} color="#D4D4D4" />
+        <TouchableWithoutFeedback onPress={toggleExpanded}>
+            <Animated.View
+                onTouchEnd={() => {
+                    if (isHeader) isExpanded.value = !isExpanded.value;
+                }}
+                style={[
+                    styles.container,
+                    {
+                        zIndex: dropdownItemsCount - index,
+                        width: windowWidth * 0.8,
+                        left: windowWidth / 2 - windowWidth * 0.4
+                    },
+                    rStyle
+                ]}
+            >
+                <View style={styles.innerContainer}>
+                    <View style={styles.iconContainer}>
+                        <AntDesign name={iconName} size={25} color="#D4D4D4" />
+                    </View>
+                    <Text style={styles.label}>{label}</Text>
+                    {isHeader && (
+                        <Animated.View
+                            style={[
+                                styles.iconContainer,
+                                styles.arrowIconContainer,
+                                {
+                                    transform: [
+                                        {
+                                            rotate: Animated.concat(isExpanded ? "90deg" : "0deg")
+                                        }
+                                    ]
+                                }
+                            ]}
+                        >
+                            <MaterialIcons name="arrow-forward-ios" size={25} color="#D4D4D4" />
+                        </Animated.View>
+                    )}
                 </View>
-                <Text style={styles.label}>{label}</Text>
-                {isHeader && (
-                    <Animated.View
-                        style={[
-                            styles.iconContainer,
-                            styles.arrowIconContainer,
-                            {
-                                transform: [
-                                    {
-                                        rotate: Animated.concat(isExpanded ? "90deg" : "0deg")
-                                    }
-                                ]
-                            }
-                        ]}
-                    >
-                        <MaterialIcons name="arrow-forward-ios" size={25} color="#D4D4D4" />
-                    </Animated.View>
-                )}
-            </View>
-        </Animated.View>
+            </Animated.View>
+        </TouchableWithoutFeedback>
     );
 };
 
