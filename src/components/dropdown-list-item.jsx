@@ -1,15 +1,18 @@
 import { createElement } from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback, View, useWindowDimensions } from "react-native";
-import Animated from "react-native-reanimated";
+import Animated, { Easing } from "react-native-reanimated";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Color from "color";
 
+const { Clock, Value, block, cond, set, startClock, stopClock, timing, clockRunning, interpolate } = Animated;
+
+const H_C = 65;
 const styles = StyleSheet.create({
     container: {
         position: "absolute",
         width: "95%",
-        height: 85,
+        height: H_C,
         borderRadius: 10
     },
     innerContainer: {
@@ -38,7 +41,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, isExpanded }) => {
+const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, isExpanded, clock }) => {
     const { width: windowWidth } = useWindowDimensions();
     const rStyle = {
         backgroundColor: Animated.interpolateColors(isExpanded, {
@@ -52,7 +55,7 @@ const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, isExpand
         }),
         top: Animated.interpolate(isExpanded, {
             inputRange: [0, 1],
-            outputRange: [(dropdownItemsCount * (85 + 10)) / 2 - 85, (85 + 10) * index]
+            outputRange: [80, (H_C + 10) * index]
         }),
         transform: [
             {
@@ -62,7 +65,7 @@ const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, isExpand
                 })
             },
             {
-                translateY: (dropdownItemsCount * (85 + 10)) / 2
+                translateY: (dropdownItemsCount * (H_C + 10)) / 2
             }
         ]
     };
@@ -72,7 +75,23 @@ const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, isExpand
     const toggleExpanded = () => {
         if (isHeader) isExpanded.setValue(!isExpanded.value);
     };
-
+    const config = {
+        duration: 2000, // 设置动画时长为500ms
+        toValue: 1,
+        easing: Easing.quad
+    };
+    const state = {
+        finished: new Value(0),
+        position: new Value(0),
+        time: new Value(0),
+        frameTime: new Value(0)
+    };
+    const timingAnimation = block([
+        cond(clockRunning(clock), 0, startClock(clock)),
+        timing(clock, state, config),
+        cond(state.finished, stopClock(clock)),
+        state.position
+    ]);
     return (
         <TouchableWithoutFeedback onPress={toggleExpanded}>
             <Animated.View
@@ -86,7 +105,10 @@ const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, isExpand
                         width: windowWidth * 0.8,
                         left: windowWidth / 2 - windowWidth * 0.4
                     },
-                    rStyle
+                    rStyle,
+                    {
+                        opacity: timingAnimation
+                    }
                 ]}
             >
                 <View style={styles.innerContainer}>
