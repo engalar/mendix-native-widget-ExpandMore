@@ -1,10 +1,13 @@
 import { createElement, useState } from "react";
 import { View } from "react-native";
+import { Clock, Value } from "react-native-reanimated";
 import { DropdownListItem } from "./dropdown-list-item";
 
 const Dropdown = ({ header, options }) => {
+    const clock = new Clock();
+    const isExpanded = new Value(false);
+
     const dropdownItems = [header, ...options];
-    const [isExpanded, setIsExpanded] = useState(true);
 
     return (
         <View>
@@ -15,9 +18,7 @@ const Dropdown = ({ header, options }) => {
                     {...item}
                     isExpanded={isExpanded}
                     dropdownItemsCount={dropdownItems.length}
-                    onPress={idx => {
-                        if (idx === 0) setIsExpanded(!isExpanded);
-                    }}
+                    clock={clock}
                 />
             ))}
         </View>
