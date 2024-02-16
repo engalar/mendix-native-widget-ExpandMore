@@ -32,7 +32,7 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "color": "^4.2.3",
-    "react-native-reanimated": "1.13.1"
+    "react-native-reanimated": "2.10.0"
   },
   "resolutions": {
     "react": "18.2.0",
