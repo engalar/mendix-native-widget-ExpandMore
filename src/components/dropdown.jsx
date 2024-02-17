@@ -4,7 +4,6 @@ import { Clock, Value } from "react-native-reanimated";
 import { DropdownListItem } from "./dropdown-list-item";
 
 const Dropdown = ({ header, options }) => {
-    const clock = new Clock();
     const isExpanded = new Value(false);
 
     const dropdownItems = [header, ...options];
@@ -18,7 +17,6 @@ const Dropdown = ({ header, options }) => {
                     {...item}
                     isExpanded={isExpanded}
                     dropdownItemsCount={dropdownItems.length}
-                    clock={clock}
                 />
             ))}
         </View>
