@@ -11,7 +11,6 @@ const H_C = 65;
 const styles = StyleSheet.create({
     container: {
         position: "absolute",
-        width: "95%",
         height: H_C,
         borderRadius: 10
     },
@@ -57,7 +56,7 @@ const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, base, on
                 }),
                 top: interpolate(base, {
                     inputRange: [0, 1],
-                    outputRange: [80, (H_C + 10) * index]
+                    outputRange: [10 - 10 * index, (H_C + 10) * index]
                 }),
                 transform: [
                     {
@@ -65,9 +64,6 @@ const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, base, on
                             inputRange: [0, 1],
                             outputRange: [1 - index * 0.08, 1]
                         })
-                    },
-                    {
-                        translateY: (dropdownItemsCount * (H_C + 10)) / 2
                     }
                 ]
             },
@@ -97,18 +93,18 @@ const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, base, on
     };
 
     return (
-        <TouchableWithoutFeedback onPress={toggleExpanded}>
-            <Animated.View
-                style={[
-                    styles.container,
-                    {
-                        zIndex: dropdownItemsCount - index,
-                        width: windowWidth * 0.8,
-                        left: windowWidth / 2 - windowWidth * 0.4
-                    },
-                    rStyle
-                ]}
-            >
+        <Animated.View
+            style={[
+                styles.container,
+                {
+                    zIndex: dropdownItemsCount - index,
+                    width: windowWidth * 0.8,
+                    left: windowWidth / 2 - windowWidth * 0.4
+                },
+                rStyle
+            ]}
+        >
+            <TouchableWithoutFeedback onPress={toggleExpanded}>
                 <View style={styles.innerContainer}>
                     <View style={styles.iconContainer}>
                         <AntDesign name={iconName} size={25} color="#D4D4D4" />
@@ -120,8 +116,8 @@ const DropdownListItem = ({ label, iconName, index, dropdownItemsCount, base, on
                         </Animated.View>
                     )}
                 </View>
-            </Animated.View>
-        </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+        </Animated.View>
     );
 };
 

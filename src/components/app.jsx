@@ -16,10 +16,10 @@ const header = {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        // backgroundColor: "#111",
+        flex: 1,
+        // backgroundColor: "blue",
         // alignItems: "center",
-        // justifyContent: "center"
+        justifyContent: "center"
     }
 });
 export default function App() {
