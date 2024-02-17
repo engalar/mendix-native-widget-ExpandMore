@@ -1,12 +1,21 @@
-import { createElement, useState } from "react";
+import { createElement, useState, useMemo } from "react";
 import { View } from "react-native";
-import { Clock, Value } from "react-native-reanimated";
+import { stopClock, Clock } from "react-native-reanimated";
 import { DropdownListItem } from "./dropdown-list-item";
+import { runTiming } from "./util";
 
+const clock = new Clock();
 const Dropdown = ({ header, options }) => {
-    const isExpanded = new Value(false);
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const base = useMemo(() => runTiming(clock, isExpanded ? 0 : 1, isExpanded ? 1 : 0), [isExpanded]);
 
     const dropdownItems = [header, ...options];
+
+    const onToggle = () => {
+        stopClock(clock);
+        setIsExpanded(!isExpanded);
+    };
 
     return (
         <View>
@@ -15,8 +24,9 @@ const Dropdown = ({ header, options }) => {
                     key={index}
                     index={index}
                     {...item}
-                    isExpanded={isExpanded}
+                    base={base}
                     dropdownItemsCount={dropdownItems.length}
+                    onToggle={onToggle}
                 />
             ))}
         </View>
